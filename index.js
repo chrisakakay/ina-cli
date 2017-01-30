@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 'use strict';
-
 const ina   = require('ina');
 const chalk = require('chalk');
 const Spnnr = require('spnnr');
