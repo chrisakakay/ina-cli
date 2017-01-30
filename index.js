@@ -2,8 +2,8 @@
 
 const ina   = require('ina');
 const chalk = require('chalk');
-const names = process.argv.slice(2);
 const Spnnr = require('spnnr');
+const names = process.argv.slice(2);
 
 function check(name) {
     return new Promise((resolve, reject) => {
