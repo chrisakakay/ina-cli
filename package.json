@@ -1,0 +1,32 @@
+{
+  "name": "ina-cli",
+  "version": "0.1.0",
+  "description": "Check name availability on npm",
+  "author": "Krisztian Nagy <chrisakakay@gmail.com> (http://chrisakakay.github.io/)",
+  "homepage": "https://github.com/chrisakakay/ina-cli",
+  "repository": "chrisakakay/ina-cli",
+  "bugs": {
+    "url": "https://github.com/chrisakakay/ina-cli/issues",
+    "email": "chrisakakay@gmail.com"
+  },
+  "bin": "index.js",
+  "scripts": {
+    "lint": "eslint index.js"
+  },
+  "keywords": [
+    "check",
+    "npm",
+    "name",
+    "taken",
+    "available"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^3.14.1"
+  },
+  "dependencies": {
+    "chalk": "^1.1.3",
+    "ina": "^0.1.1",
+    "spnnr": "^0.1.0"
+  }
+}
