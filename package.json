@@ -9,7 +9,9 @@
     "url": "https://github.com/chrisakakay/ina-cli/issues",
     "email": "chrisakakay@gmail.com"
   },
-  "bin": "index.js",
+  "bin": {
+    "ina": "index.js"
+  },
   "scripts": {
     "lint": "eslint index.js"
   },
