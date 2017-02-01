@@ -1,6 +1,6 @@
 {
   "name": "ina-cli",
-  "version": "0.1.5",
+  "version": "0.2.0",
   "description": "Check name availability on npm",
   "author": "Krisztian Nagy <chrisakakay@gmail.com> (http://chrisakakay.github.io/)",
   "homepage": "https://github.com/chrisakakay/ina-cli",
