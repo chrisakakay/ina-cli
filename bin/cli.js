@@ -1,10 +1,12 @@
 #!/usr/bin/env node
 'use strict';
 
-const ina   = require('ina');
-const chalk = require('chalk');
-const Spnnr = require('spnnr');
-const names = process.argv.slice(2);
+const ina       = require('ina');
+const chalk     = require('chalk');
+const Spnnr     = require('spnnr');
+const homedir   = require('os').homedir();
+const argv      = require('minimist')(process.argv.slice(2), { boolean: ['list', 'save']});
+const names     = argv._;
 
 function check(name) {
     return new Promise((resolve, reject) => {
