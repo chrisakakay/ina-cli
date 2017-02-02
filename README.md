@@ -1,9 +1,14 @@
 # ina-cli
 Cli for ina
 
-# install
+# Install
 
 ```bash
 npm install ina-cli -g
+```
+
+# Usage
+
+```bash
 ina name-of-your-desired-package
 ```
