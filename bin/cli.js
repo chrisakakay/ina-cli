@@ -3,68 +3,59 @@
 /*eslint no-console: 0*/
 
 const ina           = require('ina');
-const chalk         = require('chalk');
 const Spnnr         = require('spnnr');
 const fs            = require('fs');
 const path          = require('path');
+const formatter     = require('./formatter');
+const logger        = require('./logger');
 const homedir       = path.join(require('os').homedir(), '.ina/');
 const homefile      = path.join(homedir + 'packages.json');
-const argv          = require('minimist')(process.argv.slice(2), { boolean: ['list', 'save']});
-const names         = argv._;
-
-const clr           = chalk.gray;
-const clrR          = chalk.red.bold;
-const clrG          = chalk.green.bold;
-const clrW          = chalk.white.bold;
-const clrY          = chalk.yellow.bold;
-
-const namesToSave   = [];
-let   promises      = [];
+const argv          = require('minimist')(process.argv.slice(2), {
+        boolean:    ['list', 'save', 'detailed', 'version', 'recheck'],
+        alias:      { l: 'list', s: 'save', d: 'detailed', v: 'version', r: 'recheck' }
+    });
 
 function createDefaultHomefile() {
     fs.writeFileSync(homefile, JSON.stringify({ available: [] }), 'utf-8');
-    console.log(clr('Cache created for saving package names. Have fun!'));
-}
-
-function getVersionString(version) {
-    return clrY('@' + version);
-}
-
-function getDaysPassed(firstStr) {
-    const now   = new Date();
-    const first = new Date(firstStr);
-    const a     = Date.UTC(first.getFullYear(), first.getMonth(), first.getDate());
-    const b     = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
-    const days  = Math.floor((b - a) / 86400000);
-
-    return 'updated ' + days + ' days ago';
 }
 
 function check(name) {
     return new Promise((resolve, reject) => {
-        let spinner = new Spnnr(`${clr('Looking for')} ${clrW(name)}`);
+        let spinner = new Spnnr(formatter.getSpinnerText(name));
 
         ina.check(name).then((info) => {
             if (info.exists === true) {
-                spinner.stop([
-                    clrR('×'),
-                    clrW(name + '@' +info.version),
-                    clr('is unavailable,'),
-                    clr(getDaysPassed(info.modified)),
-                ].join(' '));
+                spinner.stop(formatter.getUnavailableInfo(name, info, argv.detailed));
+                resolve('');
             } else {
-                spinner.stop([
-                    clrG('√'),
-                    clrW(name),
-                    clr('is available')
-                ].join(' '));
-
-                if (argv.save) { namesToSave.push(name); };
+                spinner.stop(formatter.getAvailableInfo(name));
+                resolve(argv.save ? name : '');
             }
-
-            resolve();
         });
     });
+}
+
+function run(names) {
+    if (names.length === 0) {
+        logger.logHelp();
+        process.exit(1);
+    }
+
+    const promises = names.map(name => check(name));
+
+    Promise.all(promises).then((results) => {
+        let data        = require(homefile);
+
+        results         = results.filter(name => name !== '');
+        data.available  = Array.from(new Set(data.available.concat(results)));
+
+        fs.writeFileSync(homefile, JSON.stringify(data), 'utf-8');
+    });
+}
+
+if (argv.version) {
+    logger.logVersion();
+    process.exit(0);
 }
 
 if (argv.list) {
@@ -72,15 +63,7 @@ if (argv.list) {
         fs.mkdirSync(homedir);
         createDefaultHomefile();
     } else if (fs.existsSync(homefile)) {
-        let data = require(homefile);
-
-        if (data.available.length > 0) {
-            data.available.forEach((name) => {
-                console.log(`  ${clrW(name)}`);
-            });
-        } else {
-            console.log(clr('You have not saved any package name yet.'));
-        }
+        logger.logSaved(require(homefile));
     } else {
         createDefaultHomefile();
     }
@@ -88,19 +71,8 @@ if (argv.list) {
     process.exit(0);
 }
 
-if (names.length === 0) {
-    console.log(clr('Hey you forgot to specify the name(s) you are looking for.'));
-    process.exit(1);
+if (argv.recheck) {
+    // TODO
 }
 
-names.forEach((name) => {
-    promises.push(check(name));
-});
-
-Promise.all(promises).then(() => {
-    let data = require(homefile);
-
-    data.available = Array.from(new Set(data.available.concat(namesToSave)));
-
-    fs.writeFileSync(homefile, JSON.stringify(data), 'utf-8');
-});
+run(argv._);
