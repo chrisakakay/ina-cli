@@ -22,7 +22,7 @@ module.exports.getUnavailableInfo = (name, info, detailed) => {
             clrR('×'),
             clrW(name + '@' + info.version),
             clr('is unavailable,'),
-            clr(getDaysPassed(info.modified)),
+            clr(getDaysPassed(info.modified))
         ].join(' ');
     } else {
         return [
@@ -35,8 +35,8 @@ module.exports.getUnavailableInfo = (name, info, detailed) => {
 
 module.exports.getAvailableInfo = name => {
     return `${clrG('√')} ${clrW(name)} ${clr('is available')}`;
-}
+};
 
 module.exports.getSpinnerText = name => {
     return `${clr('Looking for')} ${clrW(name)}`;
-}
+};

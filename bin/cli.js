@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 'use strict';
-/*eslint no-console: 0*/
 
 const ina           = require('ina');
 const Spnnr         = require('spnnr');

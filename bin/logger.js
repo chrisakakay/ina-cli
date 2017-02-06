@@ -1,4 +1,5 @@
 'use strict';
+/*eslint no-console: 0*/
 
 const chalk = require('chalk');
 const clr   = chalk.gray;
@@ -16,13 +17,13 @@ module.exports.logHelp = () => {
         '   -s, --save      saves the available name',
         '   -d, --detailed  shows more info about taken names'
     ].join('\n')));
-}
+};
 
 module.exports.logVersion = () => {
     let pack = require(path.join(path.dirname(__filename) + '/../package.json'));
 
     console.log(clr(pack.version));
-}
+};
 
 module.exports.logSaved = data => {
     if (data.available.length > 0) {
@@ -30,4 +31,4 @@ module.exports.logSaved = data => {
             console.log(`* ${clrW(name)}`);
         });
     }
-}
+};
