@@ -2,6 +2,8 @@
 Cli application for checking if a desired name is registered on npm.
 The checking functionality is in an other package called __ina__.
 
+![](fancy/example_ina_cli.gif)
+
 # Install
 
 ```bash

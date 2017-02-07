@@ -22,7 +22,7 @@ function check(name) {
     return new Promise((resolve, reject) => {
         let spinner = new Spnnr(formatter.getSpinnerText(name));
 
-        ina.check(name).then((info) => {
+        ina.check(name, argv.detailed).then((info) => {
             if (info.exists === true) {
                 spinner.stop(formatter.getUnavailableInfo(name, info, argv.detailed));
                 resolve('');
