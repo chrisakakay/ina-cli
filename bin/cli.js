@@ -52,26 +52,23 @@ function run(names) {
     });
 }
 
+if (!fs.existsSync(homedir)) {
+    fs.mkdirSync(homedir);
+    createDefaultHomefile();
+}
+
 if (argv.version) {
     logger.logVersion();
     process.exit(0);
 }
 
 if (argv.list) {
-    if (!fs.existsSync(homedir)) {
-        fs.mkdirSync(homedir);
-        createDefaultHomefile();
-    } else if (fs.existsSync(homefile)) {
-        logger.logSaved(require(homefile));
-    } else {
-        createDefaultHomefile();
-    }
-
+    logger.logSaved(require(homefile));
     process.exit(0);
 }
 
 if (argv.recheck) {
-    // TODO
+    run(require(homefile).available);
+} else {
+    run(argv._);
 }
-
-run(argv._);
