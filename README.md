@@ -3,8 +3,6 @@ Cli application for checking if a desired name is registered on npm.
 
 The checking functionality is in an other package called __ina__.
 
-![](fancy/example_ina_cli.gif)
-
 # Install
 
 ```bash
@@ -16,6 +14,15 @@ npm install ina-cli -g
 ```bash
 ina name-of-your-desired-package
 ```
+
+Not taken:
+![](fancy/asdasdasd2.gif)
+
+Taken:
+![](fancy/example_ina_cli.gif)
+
+Taken with details:
+![](fancy/react.gif)
 
 Note: you can write as many names as you want
 
