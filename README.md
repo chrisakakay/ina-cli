@@ -16,13 +16,16 @@ ina name-of-your-desired-package
 ```
 
 Not taken:
-![](fancy/asdasdasd2.gif)
+
+![](fancy/example_asdasdasd2.gif)
 
 Taken:
+
 ![](fancy/example_ina_cli.gif)
 
 Taken with details:
-![](fancy/react.gif)
+
+![](fancy/example_react.gif)
 
 Note: you can write as many names as you want
 
