@@ -15,10 +15,10 @@ module.exports.getCachedNames = () => {
 };
 
 module.exports.save = names => {
-        const data      = require(homefile);
-        const filtered  = names.filter(name => name !== '');
+    const data      = require(homefile);
+    const filtered  = names.filter(name => name !== '');
 
-        data.available  = Array.from(new Set(data.available.concat(filtered)));
+    data.available  = Array.from(new Set(data.available.concat(filtered)));
 
-        fs.writeFileSync(homefile, JSON.stringify(data), 'utf-8');
+    fs.writeFileSync(homefile, JSON.stringify(data), 'utf-8');
 };
