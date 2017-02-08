@@ -1,60 +1,33 @@
 #!/usr/bin/env node
 'use strict';
 
-const ina           = require('ina');
-const Spnnr         = require('spnnr');
-const fs            = require('fs');
-const path          = require('path');
-const formatter     = require('./formatter');
-const logger        = require('./logger');
-const homedir       = path.join(require('os').homedir(), '.ina/');
-const homefile      = path.join(homedir + 'packages.json');
-const argv          = require('minimist')(process.argv.slice(2), {
-        boolean:    ['list', 'save', 'detailed', 'version', 'recheck'],
-        alias:      { l: 'list', s: 'save', d: 'detailed', v: 'version', r: 'recheck' }
+const logger    = require('./logger');
+const checker   = require('./checker');
+const cache     = require('./cache');
+const argv      = require('minimist')(process.argv.slice(2), {
+        boolean: [
+            'list',
+            'save',
+            'detailed',
+            'version',
+            'recheck',
+            'help'
+        ],
+        alias: {
+            l: 'list',
+            s: 'save',
+            d: 'detailed',
+            v: 'version',
+            r: 'recheck',
+            h: 'help'
+        }
     });
 
-function createDefaultHomefile() {
-    fs.writeFileSync(homefile, JSON.stringify({ available: [] }), 'utf-8');
-}
+cache.init();
 
-function check(name) {
-    return new Promise((resolve, reject) => {
-        let spinner = new Spnnr(formatter.getSpinnerText(name));
-
-        ina.check(name, argv.detailed).then((info) => {
-            if (info.exists === true) {
-                spinner.stop(formatter.getUnavailableInfo(name, info, argv.detailed));
-                resolve('');
-            } else {
-                spinner.stop(formatter.getAvailableInfo(name));
-                resolve(argv.save ? name : '');
-            }
-        });
-    });
-}
-
-function run(names) {
-    if (names.length === 0) {
-        logger.logHelp();
-        process.exit(1);
-    }
-
-    const promises = names.map(name => check(name));
-
-    Promise.all(promises).then((results) => {
-        let data        = require(homefile);
-
-        results         = results.filter(name => name !== '');
-        data.available  = Array.from(new Set(data.available.concat(results)));
-
-        fs.writeFileSync(homefile, JSON.stringify(data), 'utf-8');
-    });
-}
-
-if (!fs.existsSync(homedir)) {
-    fs.mkdirSync(homedir);
-    createDefaultHomefile();
+if (argv.help) {
+    logger.logHelp();
+    process.exit(0);
 }
 
 if (argv.version) {
@@ -63,12 +36,8 @@ if (argv.version) {
 }
 
 if (argv.list) {
-    logger.logSaved(require(homefile));
+    logger.logSaved(cache.getCachedNames());
     process.exit(0);
 }
 
-if (argv.recheck) {
-    run(require(homefile).available);
-} else {
-    run(argv._);
-}
+checker.checkAll(argv.recheck ? cache.getCachedNames() : argv._, argv.detailed, argv.save);

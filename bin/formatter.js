@@ -5,13 +5,16 @@ const clr   = chalk.gray;
 const clrR  = chalk.red.bold;
 const clrG  = chalk.green.bold;
 const clrW  = chalk.white.bold;
+const DAY   = 86400000;
 
-function getDaysPassed(firstStr) {
-    const now   = new Date();
-    const first = new Date(firstStr);
-    const a     = Date.UTC(first.getFullYear(), first.getMonth(), first.getDate());
-    const b     = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
-    const days  = Math.floor((b - a) / 86400000);
+function getUTCDate(date) {
+    return Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
+}
+
+function getDaysPassed(latestDate) {
+    const latest    = getUTCDate(new Date(latestDate));
+    const now       = getUTCDate(new Date());
+    const days      = Math.floor((now - latest) / DAY);
 
     return 'updated ' + days + ' days ago';
 }

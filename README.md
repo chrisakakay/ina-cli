@@ -28,6 +28,7 @@ Taken with details:
 
 # Options
 
+* -h, --help
 * -v, --version
 * -l, --list
 * -r, --recheck

@@ -11,6 +11,7 @@ module.exports.logHelp = () => {
         'Usage: ina [options] [package names]',
         '',
         'Options:',
+        '   -h, --help      prints this help text',
         '   -v, --version   prints the version',
         '   -l, --list      lists the saved names',
         '   -r, --recheck   rechecks the saved names',
@@ -25,9 +26,9 @@ module.exports.logVersion = () => {
     console.log(clr(pack.version));
 };
 
-module.exports.logSaved = data => {
-    if (data.available.length > 0) {
-        data.available.forEach((name) => {
+module.exports.logSaved = names => {
+    if (names && names.length > 0) {
+        names.forEach((name) => {
             console.log(`* ${clrW(name)}`);
         });
     }
